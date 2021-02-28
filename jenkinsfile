@@ -1,60 +1,61 @@
 pipeline {
+  
+   agent any
 
-  agent any
+environment {
+PASS = credentials('dockerhub-ID')
+}
 
-  environment {
-    PASS = credentials('dockerhub-ID')
-  }
-
-  stages {
-    stage('Build') {
-      steps {
-        sh '''
-        echo 'starting build section'
-          ./jenkins/build/mvn.sh mvn -B - DskipTests clean package
-          ./jenkins/build/build.sh 
-          '''
-      }
-
+   stages {
+     stage('Build') {
+       steps {
+         sh '''
+            echo 'starting build section'
+            ./jenkins/build/mvn.sh mvn -B -DskipTests clean package
+            ./jenkins/build/build.sh
+           '''
+       }
       post {
         always {
           archiveArtifacts artifacts: 'java-app/target/*.jar', fingerprint: true
         }
       }
+     }
 
-    }
+     stage('Test') {
+       steps {
+         sh '''
+            echo 'starting Test section'
+            ./jenkins/build/mvn.sh mvn test
+           '''
+       }
+     }
 
-    stage('Test') {
-      steps {
-        sh '''
-        echo 'starting Test section'
-          ./jenkins/build/mvn.sh mvn test 
-          '''
-      }
-    }
-
-    stage('Push') {
-      steps {
-        sh '''
-        echo 'starting Push section'
-          ./jenkins/push/push.sh 
-          '''
-      }
+     stage('Push') {
+       steps {
+         sh '''
+            echo 'starting Push section'
+            ./jenkins/push/push.sh
+           '''
+       }
       post {
         always {
           junit 'java-app/target/surefire-reports/*.xml'
         }
       }
     }
+     }
 
-    stage('Deploy') {
-      steps {
-        sh '''
-        echo 'starting Deploy section'
-          ./jenkins/deploy/deploy.sh
-        '''
-      }
-    }
+     stage('Deploy') {
+       steps {
+         sh '''
+            echo 'starting Deploy section'
+            ./jenkins/deploy/deploy.sh
+           '''
+       }
+     }
 
+   }
   }
-}
+
+
