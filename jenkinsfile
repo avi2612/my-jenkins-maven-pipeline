@@ -7,6 +7,7 @@ PASS = credentials('dockerhub-ID')
 }
 
    stages {
+
      stage('Build') {
        steps {
          sh '''
@@ -28,7 +29,14 @@ PASS = credentials('dockerhub-ID')
             echo 'starting Test section'
             ./jenkins/build/mvn.sh mvn test
            '''
+
        }
+      post {
+        always {
+          junit 'java-app/target/surefire-reports/*.xml'
+        }
+      }
+
      }
 
      stage('Push') {
@@ -38,12 +46,6 @@ PASS = credentials('dockerhub-ID')
             ./jenkins/push/push.sh
            '''
        }
-      post {
-        always {
-          junit 'java-app/target/surefire-reports/*.xml'
-        }
-      }
-    }
      }
 
      stage('Deploy') {
@@ -57,5 +59,3 @@ PASS = credentials('dockerhub-ID')
 
    }
   }
-
-
