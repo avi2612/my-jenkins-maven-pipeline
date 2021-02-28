@@ -2,4 +2,5 @@
 
 echo "***************************"
 echo "********* testing the code **************"
-docker run --rm -v $PWD/java-app:/app -v $pwd/maven-data:/root/.m2 -w /app maven:3-alpine "$@"
+WORKSPACE="/home/ubuntu/avinash/jenkins_setup/pipeline"
+docker run --rm -v $WORKSPACE/java-app:/app -v $WORKSPACE/maven-data:/root/.m2 -w /app maven:3-alpine "$@"
