@@ -49,8 +49,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh
-        '''
+        sh '''
         echo 'starting Deploy section'
           ./jenkins/deploy/deploy.sh
         '''
