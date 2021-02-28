@@ -1,0 +1,45 @@
+pipeline {
+  
+   agent any
+   stages {
+     stage('Build') {
+       steps {
+         sh '''
+            echo 'starting build section'
+            ./jenkins/build/mvn.sh mvn -B -DskipTests clean package
+            ./jenkins/build/build.sh
+           '''
+       }
+     }
+
+     stage('Test') {
+       steps {
+         sh '''
+            echo 'starting Test section'
+            ./jenkins/build/mvn.sh mvn test
+           '''
+       }
+     }
+
+     stage('Push') {
+       steps {
+         sh '''
+            echo 'starting Push section'
+            ./jenkins/push/push.sh
+           '''
+       }
+     }
+
+     stage('Deploy') {
+       steps {
+         sh '''
+            echo 'starting Deploy section'
+            ./jenkins/deploy/deploy.sh
+           '''
+       }
+     }
+
+   }
+  }
+
+
