@@ -31,11 +31,11 @@ PASS = credentials('dockerhub-ID')
            '''
 
        }
-#      post {
-#        always {
-#          junit './java-app/target/surefire-reports/*.xml'
-#        }
-#      }
+//      post {
+//       always {
+//         junit './java-app/target/surefire-reports/*.xml'
+//       }
+//      }
 
      }
 
