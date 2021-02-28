@@ -11,7 +11,7 @@ pipeline {
       steps {
         sh '''
         echo 'starting build section'
-          ./jenkins/build/mvn.sh mvn - B - DskipTests clean package
+          ./jenkins/build/mvn.sh mvn -B - DskipTests clean package
           ./jenkins/build/build.sh 
           '''
       }
